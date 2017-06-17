@@ -6,8 +6,9 @@ $(function(){
 			"width":50
 			,"height":50
 		}
-		,speed:3000
-		,type:6
+		,autoPlay:3000
+		,speed:"2s"
+		,type:5
 		,active:{
 			show:true
 			,prev:".prev"

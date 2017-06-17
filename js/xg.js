@@ -13,9 +13,10 @@ class bz{
 		this.sort=1;
 		this.zidx=300;
 		this.speed=json.speed;
+		this.autoPlay=json.autoPlay;
 		this.create();
 		this.checkBtn();
-		(!this.btnShow)?setTimeout(()=>this.show(),this.speed):null;
+		(!this.btnShow)?setTimeout(()=>this.show(),this.autoPlay):null;
 	}
 	create(){
 		this.zidx--;
@@ -32,7 +33,7 @@ class bz{
 				div.style.backgroundPositionX=-i*this.w+"px";
 				div.style.backgroundPositionY=-b*this.h+"px";
 				div.style.zIndex=this.zidx;
-				div.style.transition="2s"
+				div.style.transition=this.speed;
 				$(this.ctrl).append(div);
 			}
 		}
@@ -41,13 +42,13 @@ class bz{
 		var choice = endNumber - startNumber + 1;
 	    return Math.floor(Math.random() * choice + startNumber)
 	}
-	show(){
+	show(fid){
 		(!this.btnShow)?(this.sort>=this.imgs.length?this.sort=1:(this.sort++)):null;
-		this.moves();
+		this.moves(fid);
 		this.create();
-		(!this.btnShow)?setTimeout(()=>this.show(),this.speed):null;
+		(!this.btnShow)?setTimeout(()=>this.show(),this.autoPlay):null;
 	}
-	moves(){
+	moves(cliex){
 		$(this.ctrl+">div").each((index,el)=>{
 			switch(this.type){
 				case 1:
@@ -93,10 +94,45 @@ class bz{
 						,"transformStyle":"preserve-3d"
 					})
 					break;
+				case 7:
+					$(el).css({
+						"webkitFilter":"blur(5px)"
+						,"opacity":"0"
+					})
+					break;
+				case 8:
+					if(cliex=="you"){
+						$(el).css({
+							"marginLeft":"-200px"
+							,"opacity":"0"
+						})
+					}else if(cliex=="zuo"){
+						$(el).css({
+							"marginLeft":"200px"
+							,"opacity":"0"
+						})
+					}
+					break;
+				case 9:
+					$(this.ctrl).css("overflow","hidden")
+					if(cliex=="you"){
+						$(el).css({
+							"marginLeft":-($(this.ctrl)[0].offsetWidth)+"px"
+							
+						})
+					}else if(cliex=="zuo"){
+						$(el).css({
+							"marginLeft":($(this.ctrl)[0].offsetWidth)+"px"
+							
+						})
+					}
+					
+					break;
 			}
 			el.addEventListener("transitionend",function(){
 				$(this).remove()
 			})
+			
 		})
 	}
 	checkBtn(){
@@ -106,11 +142,11 @@ class bz{
 		}else{
 			$(this.prev).click(()=>{
 				this.sort<=1?this.sort=this.imgs.length:(this.sort--);
-				this.show();
+				this.show("zuo");
 			});
 			$(this.next).click(()=>{
 				this.sort>=this.imgs.length?this.sort=1:(this.sort++);
-				this.show();
+				this.show("you");
 			});
 		}
 	}
